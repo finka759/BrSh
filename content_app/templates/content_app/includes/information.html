@@ -1,0 +1,7 @@
+<h1 class="display-3">Brains Sharing</h1>
+<p>This is a template for a simple marketing or informational website. It includes a large callout called a
+    jumbotron and three supporting pieces of content. Use it as a starting point to create something more
+    unique.</p>
+{% if user.is_authenticated %}
+<p><a class="btn btn-primary btn-lg" href="{% url 'content_app:teacher_course_create' %}" role="button">Создать курс &raquo;</a></p>
+{% endif %}

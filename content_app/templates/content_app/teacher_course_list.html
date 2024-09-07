@@ -1,0 +1,32 @@
+{% extends 'content_app/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="container">
+    {% include 'content_app/includes/information.html' %}
+    <p></p>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for course in object_list %}
+        <div class="col">
+
+            <div class="card btn h-100" onclick="location.href='{% url 'content:teacher_course_detail' course.pk %}'">
+
+                <img src="{{ course.image | media_filter }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ course.name }}</h5>
+                    <p class="card-text">{{ course.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text">
+                        {% if course.is_published %} опубликован {% else %} не опубликован {% endif %}
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div> <!-- /container -->
+{% endblock %}

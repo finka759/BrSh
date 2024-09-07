@@ -1,0 +1,44 @@
+{% extends 'content_app/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="container">
+
+
+    </br>
+    </br>
+
+
+    <div class="col">
+        <div class="row justify-content-center">
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card text-center ">
+                    <div class="card-header">
+                        <h3 class="card-title">Вы действительно хотите удалить курс "{{object.name}}" ?</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <img src="{{ object.image | media_filter }}" class="card-img-top w-50" alt="...">
+                        <p class="card-text">{{ object.description }}</p>
+
+
+                    </div>
+
+                    <div class="card-footer d-grid">
+                        <button type="submit w-45" class="btn btn-primary">Удалить</button>
+                        </br>
+                        <button type="w-45" class="btn btn-primary">Отмена</button>
+                    </div>
+
+
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+
+
+</div> <!-- /container -->
+{% endblock %}
