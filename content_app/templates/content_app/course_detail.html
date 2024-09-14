@@ -1,0 +1,92 @@
+{% extends 'content_app/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="container">
+    </br>
+    </br>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{ object.image | media_filter }}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Курс: {{ object.name }}</h5>
+                            <p class="card-text">{{ object.description }}</p>
+                            </br>
+                            </br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                {% if user not in object.studying_users.all %}
+                <a class="btn btn-success w-100"
+                   href="{% url 'content:course_confirm_subscription' course.pk %}">
+                    Начать обучение на курсе
+                </a>
+                {% else %}
+                <a class="btn btn-outline-success w-100"
+                   href="{% url 'content:student_course_detail' course.pk %}">
+                    Продолжить
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title text-center">Меню курса</h3>
+            </div>
+            <div class="card-body">
+                <ul>
+                    {% for module in object.module_set.all %}
+                    <li>
+                        Модуль№ {{ module.ordering_number }}: {{module.name }}
+                    </li>
+                    </br>
+                    <ul>
+                        {% for lesson in module.lesson_set.all %}
+                        <li>
+                            Урок № {{ lesson.ordering_number }}: {{ lesson.name }}
+                        </li>
+                        <br>
+                        {% endfor %}
+                    </ul>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card-footer">
+                {% if user not in object.studying_users.all %}
+                <a class="btn btn-success w-100"
+                   href="{% url 'content:course_confirm_subscription' course.pk %}">
+                    Начать обучение на курсе
+                </a>
+                {% else %}
+                <a class="btn btn-outline-danger w-100"
+                   href="{% url 'content:course_confirm_subscription' course.pk %}">
+                    Покинуть обучение на курсе
+                </a>
+                {% endif %}
+                {% if user not in object.studying_users.all %}
+                {% if object.cost == 0 %}
+                <br>
+                <br>
+                <a class="btn btn-secondary w-100"
+                   href="{% url 'content:free_course_detail' course.pk %}">
+                    Просмотр свободного содержимого курса
+                </a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+</div> <!-- /container -->
+
+{% endblock %}

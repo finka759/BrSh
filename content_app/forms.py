@@ -39,4 +39,11 @@ class TeacherStepForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         ordering = ['ordering_number']
         model = Step
-        fields = "__all__"
+        fields = ('name', 'content')
+
+
+class TeacherStepForSetForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        ordering = ['ordering_number']
+        model = Step
+        fields = ('ordering_number', 'name')

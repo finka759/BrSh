@@ -1,0 +1,57 @@
+{% extends 'content_app/base.html' %}
+{% load my_tags %}
+{% block content %}
+
+<div class="container">
+    </br>
+    </br>
+
+    <div class="col">
+
+        </br>
+        </br>
+
+        <div class="card">
+            <div class="card-header ">
+                <h3>Страница свободного доступа к контенту</h3>
+            </div>
+
+            <div class="card-body">
+
+
+                <ul>
+                    {% for module in object.module_set.all %}
+
+                    <li>
+                        Модуль№ {{ module.ordering_number }}: {{ module.name }}
+                    </li>
+                    </br>
+                    <ul>
+                        {% for lesson in module.lesson_set.all %}
+                        <li>
+                            Урок № {{ lesson.ordering_number }}:
+                            <a class="" href="{% url 'content:free_step_detail' lesson.step_set.first.pk %}">
+                                {{ lesson.name }}
+                            </a>
+                        </li>
+                        </br>
+
+                        {% endfor %}
+                    </ul>
+
+
+                    {% endfor %}
+                </ul>
+            </div>
+
+
+            <div class="card-footer">
+
+            </div>
+        </div>
+
+    </div>
+
+</div> <!-- /container -->
+
+{% endblock %}

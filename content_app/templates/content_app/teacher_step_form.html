@@ -5,20 +5,25 @@
     </br>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="col">
-            <div class="row justify-content-center">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title text-center">Параметры модуля</h3>
 
+                <div class="card">
+                    <div class="card-header d-grid">
+                        {% if object %}
+                        <a class="btn btn-outline-danger w-100" href="{% url 'content_app:step_delete' object.pk %}">
+                            Удалить
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-center">Параметры шага</h3>
+                        {{ form.media }}
                         {{ form.as_p }}
                     </div>
                     <div class="card-footer d-grid">
-                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                        <button type="submit" class="btn btn-outline-primary">Сохранить</button>
                     </div>
                 </div>
-            </div>
-        </div>
+
     </form>
 </div> <!-- /container -->
 {% endblock %}

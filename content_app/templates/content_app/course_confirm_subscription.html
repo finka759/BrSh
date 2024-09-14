@@ -1,0 +1,41 @@
+{% extends 'content_app/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="container">
+    </br>
+    </br>
+    <div class="col">
+        <div class="row justify-content-center">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card text-center ">
+                    <div class="card-header d-grid">
+                        <h3 class="card-title">Подтвердите действие</h3>
+                        <a class="btn btn-primary" href="{% url 'content_app:index' %}">
+                            Отмена
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h3>"{{object.name}}"</h3>
+                        <img src="{{ object.image | media_filter }}" class="card-img-top w-50" alt="...">
+                        <p class="card-text">{{ object.description }}</p>
+                    </div>
+                    <div class="card-footer d-grid">
+                        {% if user not in object.studying_users.all %}
+                        <input type="hidden" name="start_course" value="{{ object.pk }}">
+                        <button type="submit" class="btn btn-outline-success w-100">
+                            Начать учиться
+                        </button>
+                        {% else %}
+                        <input type="hidden" name="stop_course" value="{{ object.pk }}">
+                        <button type="submit" class="btn btn-outline-danger w-100">
+                            Покинуть обучение
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> <!-- /container -->
+{% endblock %}

@@ -27,6 +27,11 @@ class User(AbstractUser):
         verbose_name="Token",
         **NULLABLE,
     )
+    # started_courses = models.ManyToManyField(
+    #     Course,
+    #     related_name="studying user",
+    #     **NULLABLE,
+    # )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

@@ -8,17 +8,17 @@
         {% for course in object_list %}
         <div class="col">
 
-            <div class="card btn h-100" onclick="location.href='#'">
+            <div class="card btn h-100" onclick="location.href='{% url 'content:course_detail' course.pk %}'">
 
-                <img src="{{ course.image | media_filter }}" class="card-img-top" alt="...">
+                <img src="{{ course.image | media_filter }}" class="card-img-top mt-1" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">{{ course.name }}</h5>
                     <p class="card-text">{{ course.description }}</p>
+                    <p class="card-text">цена: {{ course.cost }}</p>
                 </div>
-                <div class="card-footer">
-                    <p class="card-text">
+                <div class="alert alert-success mb-2" role="alert">
+
                         {% if course.is_published %} опубликован {% else %} не опубликован {% endif %}
-                    </p>
 
                 </div>
             </div>

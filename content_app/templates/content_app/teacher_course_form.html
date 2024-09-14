@@ -1,60 +1,37 @@
 {% extends 'content_app/base.html' %}
 {% block content %}
 <div class="container">
-
-
     </br>
     </br>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-
-
         <div class="col">
-            <div class="row justify-content-center">
-
-                {{ object.id }}
-                <div class="card">
-
-                    <div class="card-body">
-                        <h3 class="card-title text-center">Параметры курса</h3>
-                        {{ form.as_p }}
-
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Параметры курса</h3>
+                    {{ form.as_p }}
+                    {% for module in object.module_set.all %}
+                    {{ module.name }}
+                    {% endfor %}
+                    </br>
+                    {{ formset.management_form }}
+                    {% for form in formset.forms %}
+                    <div class="card mb-4 box-shadow">
+                        <div class="card-body">
+                            <div class="card-text text-center">
+                                Учебный модуль
+                            </div>
+                            {{ form.as_p}}
+                        </div>
                     </div>
-
-                    <div class="card-footer d-grid">
-                        <button type="submit" class="btn btn-primary">Сохранить</button>
-                    </div>
-
-
+                    {% endfor %}
                 </div>
-
-
+                <div class="card-footer d-grid">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
             </div>
         </div>
-        </br>
-        {% for module in object.module_set.all %}
 
-        {{ module.name }}
-
-        {% endfor %}
-        </br>
-        {{ formset.management_form }}
-        {% for form in formset.forms %}
-
-        <div class="card mb-4 box-shadow">
-
-            <div class="card-body">
-
-                <div class="card-text text-center">Учебный модуль</div>
-                {{ form.as_p}}
-
-            </div>
-            <div class="card-footer d-grid">
-                <button class="btn btn-primary">#</button>
-            </div>
-
-        </div>
-        {% endfor %}
     </form>
 </div> <!-- /container -->
 {% endblock %}

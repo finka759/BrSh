@@ -1,0 +1,62 @@
+{% extends 'content_app/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="container">
+    </br>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'content:free_course_detail' object.lesson.module.course.pk  %}">
+                    Курс №{{ object.lesson.module.course.pk }}:
+                    {{ object.lesson.module.course.name }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                    Модуль №{{ object.lesson.module.ordering_number }}:
+                    {{ object.lesson.module.name }}
+            </li>
+            <li class="breadcrumb-item" aria-current="page">
+                Урок №{{ object.lesson.ordering_number }}: {{ object.lesson.name }}
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                Шаг №{{ object.ordering_number }}: {{ object.name }}
+            </li>
+        </ol>
+    </nav>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="btn-toolbar" role="toolbar" aria-label="Панель инструментов с группами кнопок">
+
+            <div class="container-fluid">
+                {% for step in object.lesson.step_set.all %}
+                <a type="button" class="btn
+                    {% if  step.ordering_number == object.ordering_number %}
+                        btn-outline-success
+                    {% else %}
+                        {% if user in step.steps_used_users.all %}
+                                btn-success
+                        {% else %}
+                            btn-secondary
+                        {% endif %}
+                    {% endif %}"
+                   title="{{ step.name }}"
+                   href="{% url 'content:student_step_detail' step.pk %}">
+                    {{ step.ordering_number }}
+                </a>
+                {% endfor %}
+
+            </div>
+        </div>
+    </nav>
+    </br>
+
+    <div class="col">
+        <div class="">
+            {% autoescape off %}
+            {{ object.content }}
+            {% endautoescape %}
+        </div>
+    </div>
+
+</div> <!-- /container -->
+
+{% endblock %}

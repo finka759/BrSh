@@ -2,59 +2,96 @@
 {% load my_tags %}
 {% block content %}
 <div class="container">
+    <br/>
+    <br/>
 
-    <p></p>
-    <div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
 
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{ object.image | media_filter }}" class="img-fluid rounded-start" alt="...">
 
-        <div class="col">
-            <a class="btn btn-primary w-100" href="{% url 'content_app:course_delete' course.pk %}">
-                Удалить
-            </a>
-            </br>
-            </br>
-            <div class="card h-100">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Курс: {{ object.name }}</h5>
+                            <p class="card-text">{{ object.description }}</p>
 
-                <img src="{{ object.image | media_filter }}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{ object.name }}</h5>
-                    <p class="card-text">{{ object.description }}</p>
+                            <br>
+                            <br>
+
+                        </div>
+                    </div>
                 </div>
-                <div class="card-footer btn"
-                     onclick="location.href='{% url 'content:teacher_course_update' course.pk %}'">
-                    <div class="btn">Редактировать курс</div>
-                </div>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary w-100" href="{% url 'content:teacher_course_update' course.pk %}">
+                    Параметры курса + добавление модулей
+                </a>
+            </div>
+
+        </div>
+
+        <br/>
+        <br/>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title text-center">Меню курса</h3>
+            </div>
+
+            <div class="card-body">
 
                 <ul>
+
                     {% for module in object.module_set.all %}
 
-                    <li><a class="p-2 btn btn-outline-primary"
-                           href="{% url 'content:teacher_module_update' module.pk %}">{{ module.name }}</a>
+                    <li>Модуль№ {{ module.ordering_number }}:
+                        <a class="p-2 btn btn-outline-primary"
+                           href="{% url 'content:teacher_module_update' module.pk %}">
+                            {{ module.name }}
+                        </a>
                     </li>
+                    <br>
+
                     <ul>
+
                         {% for lesson in module.lesson_set.all %}
-                        <li><a class="p-2 btn btn-outline-primary"
-                               href="{% url 'content:teacher_lesson_update' lesson.pk %}">{{ lesson.name }}</a>
+
+                        <li>Урок № {{ lesson.ordering_number }}:
+                            <a class="p-2 btn btn-outline-primary"
+                               href="{% url 'content:teacher_lesson_update' lesson.pk %}">
+                                {{ lesson.name }}
+                            </a>
                         </li>
+                        <br>
                         <ul>
                             {% for step in lesson.step_set.all %}
-                            <li><a class="p-2 btn btn-outline-primary"
-                                   href="{% url 'content:teacher_step_update' step.pk %}">{{ step.name }}</a>
+                            <li>Шаг № {{ step.ordering_number }}:
+                                <a class="p-2 btn btn-outline-primary"
+                                   href="{% url 'content:teacher_step_update' step.pk %}">
+                                    {{ step.name }}
+                                </a>
                             </li>
+                            <br>
                             {% endfor %}
                         </ul>
                         {% endfor %}
                     </ul>
-
-
                     {% endfor %}
                 </ul>
-
-
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-danger w-100" href="{% url 'content_app:course_delete' course.pk %}">
+                    Удалить курс
+                </a>
             </div>
         </div>
 
-
     </div>
+
 </div> <!-- /container -->
+
 {% endblock %}

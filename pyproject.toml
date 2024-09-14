@@ -10,7 +10,7 @@ python = "^3.12"
 django = "4.2.2"
 psycopg2-binary = "^2.9.9"
 pillow = "^10.4.0"
-django-ckeditor-5 = "^0.2.13"
+django-tinymce = "^4.1.0"
 
 
 [build-system]

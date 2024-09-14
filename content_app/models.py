@@ -1,6 +1,7 @@
 from django.db import models
 
 from users.models import User
+from tinymce.models import HTMLField
 
 NULLABLE = {"blank": True, "null": True}
 
@@ -22,12 +23,21 @@ class Course(models.Model):
     is_published = models.BooleanField(
         default=False,
     )
-
     owner = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='владелец',
         **NULLABLE,
+    )
+    studying_users = models.ManyToManyField(
+        User,
+        related_name="courses",
+    )
+    cost = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name="цена в рублях",
+        default=0
     )
 
     class Meta:
@@ -94,7 +104,7 @@ class Step(models.Model):
         max_length=128,
         verbose_name="название шага",
     )
-    content = models.TextField(
+    content = HTMLField(
         verbose_name="контент шага",
         **NULLABLE,
     )
@@ -104,6 +114,10 @@ class Step(models.Model):
     )
     ordering_number = models.PositiveSmallIntegerField(
     )  # порядковый номер в шага в уроке
+    steps_used_users = models.ManyToManyField(
+        User,
+        **NULLABLE,
+    ) # шаги которые юзер просмотрел или юзеры которые просмтрели шаг
 
     class Meta:
         ordering = ['ordering_number']
