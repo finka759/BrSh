@@ -1,21 +1,17 @@
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+from dotenv import load_dotenv
+
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&1!6*w07z===f0ai9rd7+vyi3b8nfp3h^4*pgs)kbbjqvlbl(x'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = (os.getenv('DEBUG', False) == 'True')
 
 ALLOWED_HOSTS = []
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -28,7 +24,6 @@ INSTALLED_APPS = [
     'content_app',
     'users',
     'tinymce',
-
 ]
 
 MIDDLEWARE = [
@@ -63,17 +58,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'education',
-        'USER': 'postgres',
-        'PASSWORD': '1616',
-        'HOST': '127.0.0.1',
-        'PORT': '5432'
+        'ENGINE': os.getenv('ENGINE'),
+        'NAME': os.getenv('NAME'),
+        'USER': os.getenv('USER'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': os.getenv('HOST'),
+        'PORT': os.getenv('PORT'),
     }
 }
-
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -90,9 +82,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
-
 LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Europe/Moscow'
@@ -101,11 +90,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = 'static/'
-
 STATICFILES_DIRS = (BASE_DIR / 'static',)
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static') использовался для выполнения комманды python manage.py collectstatic
@@ -119,12 +104,12 @@ AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = 'content_app:index'
 LOGOUT_REDIRECT_URL = 'content_app:index'
 
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'AlSrVch@yandex.ru'
-EMAIL_HOST_PASSWORD = 'dwznwnicqmpgdluk'
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', False) == 'True'
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', False) == 'True'
 
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
@@ -156,7 +141,5 @@ TINYMCE_DEFAULT_CONFIG = {
     'statusbar': True,
 }
 
-STRIPE_API_KEY = 'sk_test_51PhTvKEAUH62PWAlfh68CZU6fLKFPBxRGZkV7sLxUYZTtxdsoJICz2GNKyKv6jUSLPTWf6dYo9S4YLzzMDUnheuG001Ke3GZFH'
+STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')
 
-STRIPE_PUBLIC_KEY = 'pk_test_51PhTvKEAUH62PWAlSiy0u4H4ZNVF0pQk3kSFTsYdMisNqcD5aP8TBjdy2hqWfD8OM3T75yFH2HQEjmoPyPMCBYJy00puHZ8f6h'
-STRIPE_PRIVATE_KEY = 'sk_test_51PhTvKEAUH62PWAlfh68CZU6fLKFPBxRGZkV7sLxUYZTtxdsoJICz2GNKyKv6jUSLPTWf6dYo9S4YLzzMDUnheuG001Ke3GZFH'
