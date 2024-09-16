@@ -1,7 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
+from django import forms
 from django.forms import BooleanField
 
-from users.models import User
+from users.models import User, Payment
 
 
 class StyleFormMixin:
@@ -18,3 +19,9 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
     class Meta:
         model = User
         fields = ("email", "password1", "password2")
+
+
+class PaymentCreateForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Payment
+        fields = ("course",)

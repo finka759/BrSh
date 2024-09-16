@@ -18,7 +18,7 @@ class TeacherCourseForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         ordering = ['ordering_number']
         model = Course
-        fields = ("name", "description", "image", "is_published")
+        fields = ("name", "description", "image", "is_published", "cost")
 
 
 class TeacherModuleForm(StyleFormMixin, forms.ModelForm):

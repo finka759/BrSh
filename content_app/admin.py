@@ -9,10 +9,18 @@ admin.site.register(Lesson)
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'description', 'image', 'is_published', 'owner')
 
+
 @admin.register(Module)
 class ModuleAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'course', 'ordering_number')
 
+
 @admin.register(Step)
 class StepAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'content', 'lesson', 'ordering_number')
+
+
+
+
+
+

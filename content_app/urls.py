@@ -7,6 +7,7 @@ from content_app.views import CourseListView, TeacherCourseCreateView, CourseDel
     TeacherStepDeleteView, StudentCourseListView, CourseDetailView, course_confirm_subscription, \
     StudentCourseDetailView, StudentLessonDetailView, StudentStepDetailView, FreeCourseDetailView, FreeStepDetailView
 
+
 app_name = ContentAppConfig.name
 
 urlpatterns = [
@@ -35,7 +36,4 @@ urlpatterns = [
     path('student/course/<int:pk>/', StudentCourseDetailView.as_view(), name='student_course_detail'),
     path('student/lesson/<int:pk>/', StudentLessonDetailView.as_view(), name='student_lesson_detail'),
     path('student/step/<int:pk>/', StudentStepDetailView.as_view(), name='student_step_detail'),
-
-
-
 ]

@@ -11,6 +11,7 @@ django = "4.2.2"
 psycopg2-binary = "^2.9.9"
 pillow = "^10.4.0"
 django-tinymce = "^4.1.0"
+stripe = "^10.11.0"
 
 
 [build-system]

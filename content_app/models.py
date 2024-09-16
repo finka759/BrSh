@@ -116,7 +116,6 @@ class Step(models.Model):
     )  # порядковый номер в шага в уроке
     steps_used_users = models.ManyToManyField(
         User,
-        **NULLABLE,
     ) # шаги которые юзер просмотрел или юзеры которые просмтрели шаг
 
     class Meta:
@@ -128,3 +127,23 @@ class Step(models.Model):
         return (
             f"наименование шага: {self.name}"
         )
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        User,
+        verbose_name='пользователь',
+        on_delete=models.CASCADE
+    )
+    course = models.ForeignKey(
+        Course,
+        verbose_name='Course',
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f'пользватель {self.user} подписан на курс {self.course}'
+
+    class Meta:
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'

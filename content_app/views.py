@@ -7,7 +7,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from content_app.forms import TeacherCourseForm, TeacherModuleForm, TeacherLessonForm, TeacherStepForm, \
     TeacherStepForSetForm
 from content_app.models import Course, Module, Lesson, Step
-from users.models import User
+from content_app.services import create_stripe_product, create_stripe_price, create_stripe_session
+from users.models import User, Payment
 
 
 class CourseListView(ListView):
@@ -185,14 +186,35 @@ class CourseDetailView(DetailView):  # страница предпросмотр
 def course_confirm_subscription(request, pk):
     course = get_object_or_404(Course, pk=pk)
     context = {"object": course}
-    if request.method == 'POST':
-        if request.POST.get('start_course'):
-            course.studying_users.add(request.user)
-            course.save()
-        if request.POST.get('stop_course'):
-            course.studying_users.remove(request.user)
-            course.save()
-        return redirect('content_app:student_course_list')
+    if request.user.is_authenticated:#проверка наличия оплаты курса данным пользователем
+        paid = False
+        pyment_set = course.payment_set.all()
+        for pay in pyment_set:
+            if pay.user == request.user and pay.course == course:
+                paid = True
+        context['paid'] = paid
+
+        context['subscribed'] = course.studying_users.filter(id=request.user.id).exists()
+        if request.method == 'POST':
+            if request.POST.get('create_payment'):
+                payment = Payment(user=request.user, course=course, summ=course.cost)
+                payment.save()
+                stripe_product_id = create_stripe_product(payment)
+                price = create_stripe_price(summ=payment.summ, stripe_product_id=stripe_product_id)
+                payment_id, payment_link = create_stripe_session(summ=price, pk=pk)
+                payment.payment_id = payment_id
+                payment.payment_link = payment_link
+                payment.save()
+                return redirect(payment_link, code=303)
+            if request.POST.get('start_course'):
+                course.studying_users.add(request.user)
+                course.save()
+                return redirect('content_app:student_course_list')
+            if request.POST.get('stop_course'):
+                course.studying_users.remove(request.user)
+                course.save()
+                return redirect('content_app:student_course_list')
+
     return render(request, 'content_app/course_confirm_subscription.html', context)
 
 
@@ -226,5 +248,6 @@ class FreeCourseDetailView(DetailView):
 class FreeStepDetailView(DetailView):
     model = Step
     template_name = "content_app/free_step_detail.html"
+
 
 
