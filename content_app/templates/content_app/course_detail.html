@@ -24,10 +24,12 @@
             </div>
             <div class="card-footer">
                 {% if user not in object.studying_users.all %}
+                {% if user.is_authenticated %}
                 <a class="btn btn-success w-100"
                    href="{% url 'content:course_confirm_subscription' course.pk %}">
                     Начать обучение на курсе
                 </a>
+                {% endif %}
                 {% else %}
                 <a class="btn btn-outline-success w-100"
                    href="{% url 'content:student_course_detail' course.pk %}">
@@ -62,10 +64,12 @@
             </div>
             <div class="card-footer">
                 {% if user not in object.studying_users.all %}
+                 {% if user.is_authenticated %}
                 <a class="btn btn-success w-100"
                    href="{% url 'content:course_confirm_subscription' course.pk %}">
                     Начать обучение на курсе
                 </a>
+                {% endif %}
                 {% else %}
                 <a class="btn btn-outline-danger w-100"
                    href="{% url 'content:course_confirm_subscription' course.pk %}">

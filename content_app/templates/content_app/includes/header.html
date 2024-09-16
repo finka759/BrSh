@@ -6,10 +6,12 @@
             <ul class="nav  col-lg-auto me-lg-auto  justify-content-center mb-md-0">
 
                 <li class="navbar-brand"><a href="{% url 'content_app:index' %}" class="btn btn-warning px-1 ">BrSh</a></li>
+                 {% if user.is_authenticated %}
                 <li><a href="{% url 'content_app:student_course_list' %}" class="nav-link px-2 text-white">Обучение</a>
                 </li>
                 <li><a href="{% url 'content_app:teacher_course_list' %}"
                        class="nav-link px-2 text-white">Преподавание</a></li>
+                {% endif %}
 
             </ul>
 

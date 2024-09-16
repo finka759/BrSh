@@ -1,14 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
 from content_app.forms import TeacherCourseForm, TeacherModuleForm, TeacherLessonForm, TeacherStepForm, \
     TeacherStepForSetForm
 from content_app.models import Course, Module, Lesson, Step
 from content_app.services import create_stripe_product, create_stripe_price, create_stripe_session
-from users.models import User, Payment
+from users.models import Payment
 
 
 class CourseListView(ListView):
@@ -21,7 +21,7 @@ class CourseListView(ListView):
         return qs
 
 
-class TeacherCourseListView(ListView):
+class TeacherCourseListView(ListView, LoginRequiredMixin):
     model = Course
     template_name = "content_app/teacher_course_list.html"
 
@@ -31,9 +31,16 @@ class TeacherCourseListView(ListView):
         return qs
 
 
-class TeacherCourseDetailView(DetailView):
+class TeacherCourseDetailView(DetailView, LoginRequiredMixin):
     model = Course
     template_name = "content_app/teacher_course_detail.html"
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.owner:
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
 
 class TeacherCourseCreateView(CreateView, LoginRequiredMixin):
@@ -49,10 +56,17 @@ class TeacherCourseCreateView(CreateView, LoginRequiredMixin):
         return super().form_valid(form)
 
 
-class TeacherCourseUpdateView(UpdateView):
+class TeacherCourseUpdateView(UpdateView, LoginRequiredMixin):
     model = Course
     form_class = TeacherCourseForm
     template_name = "content_app/teacher_course_form.html"
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.owner:
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
     def get_success_url(self):
         return reverse_lazy("content_app:teacher_course_update", kwargs={"pk": self.object.pk})
@@ -78,15 +92,30 @@ class TeacherCourseUpdateView(UpdateView):
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class CourseDeleteView(DeleteView):
+class TeacherCourseDeleteView(DeleteView, LoginRequiredMixin):
     model = Course
     success_url = reverse_lazy("content_app:teacher_course_list")
+    template_name = "content_app/teacher_course_confirm_delete.html"
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.owner:
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
 
-class TeacherModuleUpdateView(UpdateView):
+class TeacherModuleUpdateView(UpdateView, LoginRequiredMixin):
     model = Module
     form_class = TeacherModuleForm
     template_name = "content_app/teacher_module_form.html"
+
+    def get_object(self, queryset=None, ):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.course.owner:
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
     def get_success_url(self):
         return reverse_lazy("content_app:teacher_course_detail", kwargs={"pk": self.object.course.id})
@@ -112,10 +141,17 @@ class TeacherModuleUpdateView(UpdateView):
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class TeacherLessonUpdateView(UpdateView):
+class TeacherLessonUpdateView(UpdateView, LoginRequiredMixin):
     model = Lesson
     form_class = TeacherLessonForm
     template_name = "content_app/teacher_lesson_form.html"
+
+    def get_object(self, queryset=None, ):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.module.course.owner:
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
     def get_success_url(self):
         return reverse_lazy("content_app:teacher_course_detail", kwargs={"pk": self.object.module.course.id})
@@ -141,19 +177,33 @@ class TeacherLessonUpdateView(UpdateView):
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class TeacherStepUpdateView(UpdateView):
+class TeacherStepUpdateView(UpdateView, LoginRequiredMixin):
     model = Step
     form_class = TeacherStepForm
     template_name = "content_app/teacher_step_form.html"
     success_url = reverse_lazy("content_app:teacher_course_list")
 
+    def get_object(self, queryset=None, ):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.lesson.module.course.owner:
+            self.object.save()
+            return self.object
+        raise PermissionDenied
+
     def get_success_url(self):
         return reverse_lazy("content_app:teacher_course_detail", kwargs={"pk": self.object.lesson.module.course.id})
 
 
-class TeacherModuleDeleteView(DeleteView):
+class TeacherModuleDeleteView(DeleteView, LoginRequiredMixin):
     model = Module
     success_url = reverse_lazy("content_app:teacher_course_list")
+
+    def get_object(self, queryset=None, ):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.course.owner:
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
 
 class TeacherModuleCreateView(CreateView, LoginRequiredMixin):
@@ -163,12 +213,19 @@ class TeacherModuleCreateView(CreateView, LoginRequiredMixin):
     success_url = reverse_lazy("content_app:teacher_course_list")
 
 
-class TeacherStepDeleteView(DeleteView):
+class TeacherStepDeleteView(DeleteView, LoginRequiredMixin):
     model = Step
     success_url = reverse_lazy("content_app:teacher_course_list")
 
+    def get_object(self, queryset=None, ):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.lesson.module.course.owner:
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
-class StudentCourseListView(ListView):
+
+class StudentCourseListView(ListView, LoginRequiredMixin):
     model = Course
     template_name = "content_app/student_course_list.html"
 
@@ -185,8 +242,10 @@ class CourseDetailView(DetailView):  # страница предпросмотр
 
 def course_confirm_subscription(request, pk):
     course = get_object_or_404(Course, pk=pk)
+    if not course.is_published:
+        raise PermissionDenied
     context = {"object": course}
-    if request.user.is_authenticated:#проверка наличия оплаты курса данным пользователем
+    if request.user.is_authenticated:  # проверка наличия оплаты курса данным пользователем
         paid = False
         pyment_set = course.payment_set.all()
         for pay in pyment_set:
@@ -218,26 +277,33 @@ def course_confirm_subscription(request, pk):
     return render(request, 'content_app/course_confirm_subscription.html', context)
 
 
-class StudentCourseDetailView(DetailView):
+class StudentCourseDetailView(DetailView, LoginRequiredMixin):
     model = Course
     template_name = "content_app/student_course_detail.html"
 
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        user = self.request.user
+        studying_users = self.object.studying_users.all()
+        if user in studying_users:
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
-class StudentLessonDetailView(DetailView):
-    model = Lesson
-    template_name = "content_app/student_lesson_detail.html"
 
-
-class StudentStepDetailView(DetailView):
+class StudentStepDetailView(DetailView, LoginRequiredMixin):
     model = Step
     template_name = "content_app/student_step_detail.html"
 
     def get_object(self, queryset=None, ):
         self.object = super().get_object(queryset)
         user = self.request.user
-        self.object.steps_used_users.add(user)
-        self.object.save()
-        return self.object
+        studying_users = self.object.lesson.module.course.studying_users.all()
+        if user in studying_users:  # доступ для просмотра только разрешенным пользователям
+            self.object.steps_used_users.add(user)
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
 
 class FreeCourseDetailView(DetailView):
@@ -248,6 +314,3 @@ class FreeCourseDetailView(DetailView):
 class FreeStepDetailView(DetailView):
     model = Step
     template_name = "content_app/free_step_detail.html"
-
-
-

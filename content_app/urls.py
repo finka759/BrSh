@@ -1,11 +1,13 @@
 from django.urls import path
 
 from content_app.apps import ContentAppConfig
-from content_app.views import CourseListView, TeacherCourseCreateView, CourseDeleteView, \
+from content_app.views import CourseListView, TeacherCourseCreateView, TeacherCourseDeleteView, \
     TeacherCourseListView, TeacherCourseUpdateView, TeacherCourseDetailView, TeacherModuleUpdateView, \
     TeacherLessonUpdateView, TeacherStepUpdateView, TeacherModuleDeleteView, TeacherModuleCreateView, \
     TeacherStepDeleteView, StudentCourseListView, CourseDetailView, course_confirm_subscription, \
-    StudentCourseDetailView, StudentLessonDetailView, StudentStepDetailView, FreeCourseDetailView, FreeStepDetailView
+    StudentCourseDetailView, StudentStepDetailView, FreeCourseDetailView, FreeStepDetailView
+
+
 
 
 app_name = ContentAppConfig.name
@@ -18,8 +20,7 @@ urlpatterns = [
     path('free/course/<int:pk>/', FreeCourseDetailView.as_view(), name='free_course_detail'),
     path('free/step/<int:pk>/', FreeStepDetailView.as_view(), name='free_step_detail'),
 
-    path('course/<int:pk>/delete/', CourseDeleteView.as_view(), name='course_delete'),
-
+    path('teacher/course/<int:pk>/delete/', TeacherCourseDeleteView.as_view(), name='teacher_course_delete'),
     path('teacher/course/create/', TeacherCourseCreateView.as_view(), name='teacher_course_create'),
     path('teacher/course/<int:pk>/update/', TeacherCourseUpdateView.as_view(), name='teacher_course_update'),
     path('teacher/course_list/', TeacherCourseListView.as_view(), name='teacher_course_list'),
@@ -34,6 +35,6 @@ urlpatterns = [
     path('student/course_list/', StudentCourseListView.as_view(), name='student_course_list'),
     path('student/confirm_subscription/<int:pk>/', course_confirm_subscription, name='course_confirm_subscription'),
     path('student/course/<int:pk>/', StudentCourseDetailView.as_view(), name='student_course_detail'),
-    path('student/lesson/<int:pk>/', StudentLessonDetailView.as_view(), name='student_lesson_detail'),
+
     path('student/step/<int:pk>/', StudentStepDetailView.as_view(), name='student_step_detail'),
 ]

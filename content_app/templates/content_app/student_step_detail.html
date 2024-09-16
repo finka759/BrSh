@@ -6,7 +6,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="{% url 'content:free_course_detail' object.lesson.module.course.pk  %}">
+                <a href="{% url 'content:student_course_detail' object.lesson.module.course.pk  %}">
                     Курс №{{ object.lesson.module.course.pk }}:
                     {{ object.lesson.module.course.name }}
                 </a>

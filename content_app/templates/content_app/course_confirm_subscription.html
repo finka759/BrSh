@@ -37,7 +37,7 @@
                             </button>
                             {% endif %}
                         {% endif %}
-                        {% if object.cost != 0 or paid %}
+                        {% if object.cost == 0 or paid %}
                         <br>
                         <br>
                         <input type="hidden" name="start_course" value="{{ object.pk }}">
