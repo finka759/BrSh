@@ -32,7 +32,7 @@ class TeacherLessonForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         ordering = ['ordering_number']
         model = Lesson
-        fields = "__all__"
+        fields = ('ordering_number', 'name')
 
 
 class TeacherStepForm(StyleFormMixin, forms.ModelForm):

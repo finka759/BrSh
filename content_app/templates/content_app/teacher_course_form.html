@@ -7,12 +7,19 @@
         {% csrf_token %}
         <div class="col">
             <div class="card">
+                <div class="card-header">
+
+                    <h3 class="card-title text-center">
+                        <a class="btn btn-primary" href="{% url 'content:teacher_course_detail' course.pk %}">
+                            &larr;
+                        </a>
+                        Параметры курса
+                    </h3>
+                </div>
                 <div class="card-body">
-                    <h3 class="card-title text-center">Параметры курса</h3>
                     {{ form.as_p }}
-                    {% for module in object.module_set.all %}
-                    {{ module.name }}
-                    {% endfor %}
+                </div>
+                <div class="card-footer d-grid">
                     </br>
                     {{ formset.management_form }}
                     {% for form in formset.forms %}
@@ -25,8 +32,7 @@
                         </div>
                     </div>
                     {% endfor %}
-                </div>
-                <div class="card-footer d-grid">
+
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </div>
             </div>

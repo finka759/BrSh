@@ -118,7 +118,7 @@ class TeacherModuleUpdateView(UpdateView, LoginRequiredMixin):
         raise PermissionDenied
 
     def get_success_url(self):
-        return reverse_lazy("content_app:teacher_course_detail", kwargs={"pk": self.object.course.id})
+        return reverse_lazy("content_app:teacher_module_update", kwargs={"pk": self.object.pk})
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -154,7 +154,7 @@ class TeacherLessonUpdateView(UpdateView, LoginRequiredMixin):
         raise PermissionDenied
 
     def get_success_url(self):
-        return reverse_lazy("content_app:teacher_course_detail", kwargs={"pk": self.object.module.course.id})
+        return reverse_lazy("content_app:teacher_lesson_update", kwargs={"pk": self.object.pk})
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
