@@ -14,6 +14,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ course.name }}</h5>
                     <p class="card-text">{{ course.description }}</p>
+                    <p class="card-text">автор: {{ course.owner.email }}</p>
                     <p class="card-text">цена: {{ course.cost }}</p>
                 </div>
                 <div class="alert alert-success mb-2" role="alert">
