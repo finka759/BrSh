@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('content_app', '0018_subscription'),
-        ('users', '0002_alter_user_phone'),
+        ('users', '0001_initial'),
     ]
 
     operations = [
