@@ -1,0 +1,46 @@
+{% extends 'content_app/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="container">
+    </br>
+    </br>
+    <div class="col">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="card text-center ">
+                <div class="card-header d-grid">
+                    <h3 class="card-title">Проверка кода подтвеждения</h3>
+                    {% if mistake %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ mistake }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Введите код подтверждения, отправленный вам на телефон</h5>
+                    <p>
+                        <label for="id_phone">Телефон:</label>
+                        <input type="text" name="phone" maxlength="35" class="form-control" required id="id_phone">
+                        <span class="helptext">укажите ваш телефон</span>
+                    </p>
+                    <p>
+                        <label for="id_email">Email:</label>
+                        <input type="email" name="email" maxlength="254" autofocus class="form-control" required
+                               id="id_email">
+                        <span class="helptext">укажите ваш email</span>
+                    </p>
+                    <p>
+                        <label for="id_code_confirm">Код подстверждения:</label>
+                        <input type="text" name="code_confirm" class="form-control" required id="id_code_confirm">
+                    </p>
+                </div>
+                <div class="card-footer d-grid">
+                    <button type="submit" class="btn btn-outline-success w-100">
+                        ВВОД
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> <!-- /container -->
+{% endblock %}

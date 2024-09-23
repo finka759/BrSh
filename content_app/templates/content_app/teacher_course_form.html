@@ -10,9 +10,11 @@
                 <div class="card-header">
 
                     <h3 class="card-title text-center">
+                        {% if object %}
                         <a class="btn btn-primary" href="{% url 'content:teacher_course_detail' course.pk %}">
                             &larr;
                         </a>
+                        {% endif %}
                         Параметры курса
                     </h3>
                 </div>

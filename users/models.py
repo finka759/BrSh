@@ -27,6 +27,11 @@ class User(AbstractUser):
         verbose_name="Token",
         **NULLABLE,
     )
+    code_confirm = models.CharField(
+        max_length=6,
+        verbose_name="code_confirm",
+        **NULLABLE,
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -34,6 +39,7 @@ class User(AbstractUser):
     class Meta:
         verbose_name = "пользователь"
         verbose_name_plural = "пользователи"
+
 
     def __str__(self):
         return f"{self.email}"

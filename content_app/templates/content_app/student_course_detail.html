@@ -5,25 +5,18 @@
 <div class="container">
     </br>
     </br>
-
     <div class="col">
-
         </br>
         </br>
-
         <div class="card">
             <div class="card-header ">
                 {% if user in object.studying_users.all %}
                 <h3>Страница студента</h3>
                 {% endif %}
             </div>
-
             <div class="card-body">
-
-
                 <ul>
                     {% for module in object.module_set.all %}
-
                     <li>
                         Модуль№ {{ module.ordering_number }}: {{ module.name }}
                     </li>
@@ -37,23 +30,14 @@
                             </a>
                         </li>
                         </br>
-
                         {% endfor %}
                     </ul>
-
-
                     {% endfor %}
                 </ul>
             </div>
-
-
             <div class="card-footer">
-
             </div>
         </div>
-
     </div>
-
 </div> <!-- /container -->
-
 {% endblock %}
